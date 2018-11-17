@@ -1,99 +1,105 @@
 <?php
-    class Account {
+require_once ('includes/Constants.php');
 
-        public $errorsArray = [1,2];
+class Account {
+        public static $temp = 1;
+        public $errorsArray = [];
 
         public function _constructor() {
-            $this->errorsArray = [1,2,3];
-            $test = [1,2,3,4];
-            var_dump($test);die();
         }
 
         public function register($username, $firstName, $lastName, $email1, $email2, $password1, $password2) {
-            $this->validateUsername($username);
-            $this->validateFirstName($firstName);
-            $this->validateLastName($lastName);
-            $this->validateEmail($email1, $email2);
-            $this->validatePassword($password1, $password2);
-
-            if(empty($this->errorsArray)) {
-                // Insert into DB
-                return true;
-            } else {
-                return false;
-            }
+            $this->errorsArray = [];
+            if(
+                $this->validateUsername($username) &&
+                $this->validateFirstName($firstName) &&
+                $this->validateLastName($lastName) &&
+                $this->validateEmail($email1, $email2) &&
+                $this->validatePassword($password1, $password2)) {
+                echo "true";
+                    return true;
+            };
+            echo "false";
+            return false;
         }
 
         private function validateUsername($data) {
-
             if(strlen($data) > 25 || strlen($data) < 6) {
-                array_push($this->errorsArray[], "Your username must be between 6 and 25");
-//                return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$usernameInvalid);
+                echo $this->errorsArray[0];
+                return false;
             }
+
+            return true;
         }
 
         private function validateFirstName($data) {
-
             if(strlen($data) > 25 || strlen($data) < 6) {
-                array_push($this->errorsArray[], "Your firstname must be between 6 and 25");
-//                return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$firstnameEmpty);
+
+                return false;
             }
+
+            return true;
         }
 
         private function validateLastName($data) {
-
             if(strlen($data) > 25 || strlen($data) < 6) {
-                array_push($this->errorsArray, "Your last name must be between 6 and 25");
-                // return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$lastnameEmpty);
+
+                return false;
             }
+
+            return true;
         }
 
         private function validateEmail($email1, $email2) {
-
             if( !filter_var(FILTER_VALIDATE_EMAIL)) {
-                array_push($this->errorsArray, "Your email is not correct");
-//                return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$emailInvalid);
+
+                return false;
             }
 
             if(!filter_var(FILTER_VALIDATE_EMAIL)) {
-                array_push($this->errorsArray, "Your email is not correct");
-//                return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$emailInvalid);
+
+                return false;
             }
 
             if ($email1 !== $email2) {
-                array_push($this->errorsArray, "Your email is not match");
-//                return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$emailDoNotMatch);
+
+                return false;
             }
+
+            return true;
         }
 
         private function validatePassword($password1, $password2) {
-
             if ($password1 !== $password2) {
-                array_push($this->errorsArray, "Your password is not match");
-                //return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$passwordsDoNotMatch);
+
+                return false;
             }
 
             if(strlen($password1) > 25 || strlen($password1) < 6) {
-                array_push($this->errorsArray, "Your password must be between 6 and 25");
-                // return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$passwordsInvalid);
+
+                return false;
             }
 
             if(strlen($password2) > 25 || strlen($password2) < 6) {
-                array_push($this->errorsArray, "Your password  must be between 6 and 25");
-//                return "<div>Aaaaaaa qdwqdqwdddddddddddxsxsâxxx</div>";
-                return;
+                array_push($this->errorsArray, Constants::$passwordsInvalid);
+
+                return false;
             }
+
+            return true;
         }
 
         public function displayError() {
-//            echo $this->errorsArray;
+            if( ! empty($this->errorsArray)) {
+                return $this->errorsArray[0];
+            }
         }
     }

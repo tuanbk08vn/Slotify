@@ -1,7 +1,8 @@
 <?php
 include("../../classes/Account.php");
-echo ('hehehe');
+
 if(isset($_POST['registerButton'])) {
+    echo "hêhhe ";
     $username = sanitizeInput($_POST['username']);
     $firstName = sanitizeInput($_POST['firstName']);
     $lastName = sanitizeInput($_POST['lastName']);
